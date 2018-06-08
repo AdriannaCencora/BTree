@@ -15,18 +15,18 @@ private:
 public:
   int maxElements;            //Maksymalna liczba elementów w węźle. El. = [key, childPointer]
 
-  std::vector<Node<T>*>childPointers;
+  std::vector<Node<T>*>children;
   std::vector<Key<T>> keys;
 
   Node(int _maxElements) :
           maxElements(_maxElements),
-          childPointers(_maxElements, nullptr),
+          children(_maxElements, nullptr),
           keys(_maxElements)
   {
   }
   ~Node()
   {
-      for(auto child : childPointers)
+      for(auto child : children)
           delete child;
   };
 
@@ -38,34 +38,41 @@ public:
   void traverse() {
       printf("insertNonFull invoked\n");
   };
-  Node<T> *search(T k)
-  {
-      printf("insertNonFull invoked\n");
-
-  };
-
+   bool isElementsNumberCorrect();
   void sort();
-  friend Tree<T>;
+  bool canRemoveElement();
+    friend Tree<T>;
 };
 
 
 template <class T>
 void Node<T>::sort(){
-//  while(true){
-//      bool changed = false;
-//      for(int i = 0; i < maxElements - 1; i++) {
-//          if(keys[i] > keys[i+1])
-//          {
-//              std::swap(keys[i], keys[i+1]);
-//              changed = true;
-//          }
-//       }
-//      if(!changed) {
-//          break;
-//        }
-//    }
     std::sort(this->keys.begin(), this->keys.begin() + this->maxElements);
 
+}
+
+template<class T>
+bool Node<T>::isElementsNumberCorrect() {
+    int sum = 0;
+    for (int i = 0; i < maxElements; i++) {
+        if (keys[i].isAssigned) {
+            sum++;
+        }
+
+    }
+    return sum > maxElements / 2;
+}
+
+template<class T>
+bool Node<T>::canRemoveElement() {
+    int sum = -1;
+    for (int i = 0; i < maxElements; i++) {
+        if (keys[i].isAssigned) {
+            sum++;
+        }
+
+    }
+    return sum > maxElements / 2;
 }
 
 #endif // NODE_H
